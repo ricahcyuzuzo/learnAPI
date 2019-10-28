@@ -9,6 +9,15 @@ chai.use(chaiHttp);
 
 describe('Testing the Whole App API', () => {
     describe('Testing the GET Routes', () => {
+        it('It should Welcome the API user', () => {
+            chai.request(app)
+                .get('/')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                })
+        })
+
         it('It has to get all Users', (done) =>{
             chai.request(app)
                 .get('/users')
@@ -27,6 +36,16 @@ describe('Testing the Whole App API', () => {
                     res.body.should.be.a('object');
                 })
             done();
+        });
+
+        it('It has to get "User not found"', (done) => {
+            chai.request(app)
+                .get('/users/3565')
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.be.a('object');
+                    done();
+                })
         });
     })
 
@@ -63,9 +82,20 @@ describe('Testing the Whole App API', () => {
                     done();
                 })
         });
+
+        it('It has to get "User not found"', (done) => {
+            chai.request(app)
+                .put('/users/3565')
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
     });
 
     describe('Testing the Delete routes', () => {
+
         it('It has to delete one user', (done) => {
             chai.request(app)
                 .delete('/users/2')
@@ -76,6 +106,18 @@ describe('Testing the Whole App API', () => {
                     done();
                 })
         });
+
+        it('It has to get "User not found"', (done) => {
+            chai.request(app)
+                .delete('/users/3565')
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
     });
+
+
 
 });
